@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Tquyen </title>
+  <style>
+    ::backdrop {
+      background: pink;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: pink;
+      font-family: Arial, sans-serif;
+    }
+
+    .envelope {
+      position: relative;
+      width: 260px;
+      height: 190px;
+      background: #fdaecb;
+      cursor: pointer;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 130px solid transparent;
+      border-right: 130px solid transparent;
+      border-bottom: 90px solid #f577a5;
+      transform-origin: top;
+      transition: transform 0.7s ease;
+      z-index: 2;
+    }
+
+    .letter {
+      position: absolute;
+      top: 100%;
+      left: 10%;
+      width: 80%;
+      min-height: 120px;
+      background: #fff;
+      text-align: center;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: top 0.7s ease;
+      z-index: 1;
+    }
+
+    .letter img {
+      max-width: 100%;
+      max-height: 100px;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+
+    .open .flap {
+      transform: rotateX(180deg);
+    }
+
+    .open .letter {
+      top: 20px;
+    }
+
+    .btn {
+      margin-top: 10px;
+      padding: 6px 14px;
+      border: none;
+      background: #f577a5;
+      color: #fff;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="envelope" id="envelope">
+    <div class="flap"></div>
+    <div class="letter">
+      <div id="content"></div>
+      <button class="btn" id="nextBtn">Tiếp</button>
+    </div>
+  </div>
+
+  <script>
+    const content = document.getElementById("content");
+    const nextBtn = document.getElementById("nextBtn");
+    const envelope = document.getElementById("envelope");
+
+    // Dùng ảnh trong thư mục
+    const pages = [
+      `<p>tquyen cute vcl 💌</p>`,
+      `<p>iu em vcl lun ❤️</p>`,
+      `<p>em là người con gái tuyệt vời nhất mà anh từng gặp 🥰</p>`,
+      `<p>cảm ơn em đã đến bên anh, làm anh hạnh phúc mỗi ngày 😘</p>`,
+      `<p>chúc em luôn vui vẻ, hạnh phúc và học thật giỏi nhen 💖</p>`,
+    ];
+
+    let index = 0;
+    content.innerHTML = pages[index];
+
+    envelope.addEventListener("click", () => {
+      envelope.classList.add("open");
+    });
+
+    nextBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      index++;
+      if (index < pages.length) {
+        content.innerHTML = pages[index];
+      } else {
+        content.innerHTML = `<p>Hết thiệt rồi 😍</p>`;
+        nextBtn.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
+
