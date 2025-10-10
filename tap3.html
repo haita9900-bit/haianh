@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>wed hải anh coder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #0d1117;
+  color: #c9d1d9;
+}
+
+header {
+  background: #161b22;
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #30363d;
+}
+
+h1, h2 { color: #58a6ff; }
+
+main {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+}
+
+ul { list-style: none; padding: 0; }
+li {
+  padding: 5px;
+  border-bottom: 1px solid #30363d;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+li span {
+  cursor: pointer;
+}
+
+li:hover { background: #21262d; }
+
+input, textarea, button {
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+}
+
+textarea {
+  width: 100%;
+  height: 120px;
+  background: #0d1117;
+  color: #c9d1d9;
+}
+
+button {
+  background: #238636;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover { background: #2ea043; }
+
+pre {
+  background: #0d1117;
+  padding: 1rem;
+  border-radius: 6px;
+  white-space: pre-wrap;
+}
+</style>
+<body>
+  <header>
+    <h1>🌐share code</h1>
+  </header>
+
+  <main>
+    <!-- Repository -->
+    <section id="repos">
+      <h2>📂 Repository của bạn</h2>
+      <ul id="repoList"></ul>
+      <input type="text" id="repoName" placeholder="Tên repository...">
+      <button onclick="createRepo()">➕ Tạo Repo</button>
+    </section>
+
+    <!-- Branches -->
+    <section id="branches" style="display:none;">
+      <h2 id="repoTitle"></h2>
+      <ul id="branchList"></ul>
+      <input type="text" id="branchName" placeholder="Tên branch...">
+      <button onclick="createBranch()">🌿 Tạo Branch</button>
+      <button onclick="backToRepos()">⬅ Quay lại Repo</button>
+    </section>
+
+    <!-- Files -->
+    <section id="files" style="display:none;">
+      <h2 id="branchTitle"></h2>
+      <ul id="fileList"></ul>
+      <input type="text" id="fileName" placeholder="Tên file (vd: index.js)">
+      <textarea id="fileCode" placeholder="Viết code vào đây..."></textarea>
+      <button onclick="saveFile()">💾 Lưu File</button>
+      <button onclick="backToBranches()">⬅ Quay lại Branch</button>
+    </section>
+
+    <!-- Viewer -->
+    <section id="viewer" style="display:none;">
+      <h2 id="fileTitle"></h2>
+      <pre id="codeView"></pre>
+      <button onclick="backToFiles()">⬅ Quay lại Files</button>
+    </section>
+  </main>
+<script>
+  let repos = JSON.parse(localStorage.getItem("repos")) || {};
+let currentRepo = null;
+let currentBranch = null;
+
+function saveData() {
+  localStorage.setItem("repos", JSON.stringify(repos));
+}
+
+// ================= Repo =================
+function createRepo() {
+  const name = document.getElementById("repoName").value.trim();
+  if (!name) return alert("Nhập tên repository!");
+  if (repos[name]) return alert("Repo đã tồn tại!");
+  repos[name] = {};
+  saveData();
+  loadRepos();
+  document.getElementById("repoName").value = "";
+}
+
+function loadRepos() {
+  const repoList = document.getElementById("repoList");
+  repoList.innerHTML = "";
+  for (let repo in repos) {
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${repo}</span> <button onclick="deleteRepo('${repo}')">❌</button>`;
+    li.querySelector("span").onclick = () => openRepo(repo);
+    repoList.appendChild(li);
+  }
+}
+
+function openRepo(repo) {
+  currentRepo = repo;
+  document.getElementById("repoTitle").textContent = "Repo: " + repo;
+  document.getElementById("repos").style.display = "none";
+  document.getElementById("branches").style.display = "block";
+  loadBranches();
+}
+
+function deleteRepo(repo) {
+  if (confirm("Xóa repo '" + repo + "'?")) {
+    delete repos[repo];
+    saveData();
+    loadRepos();
+  }
+}
+
+function backToRepos() {
+  document.getElementById("branches").style.display = "none";
+  document.getElementById("repos").style.display = "block";
+}
+
+// ================= Branch =================
+function createBranch() {
+  const name = document.getElementById("branchName").value.trim();
+  if (!name) return alert("Nhập tên branch!");
+  if (repos[currentRepo][name]) return alert("Branch đã tồn tại!");
+  repos[currentRepo][name] = {};
+  saveData();
+  loadBranches();
+  document.getElementById("branchName").value = "";
+}
+
+function loadBranches() {
+  const branchList = document.getElementById("branchList");
+  branchList.innerHTML = "";
+  for (let branch in repos[currentRepo]) {
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${branch}</span> <button onclick="deleteBranch('${branch}')">❌</button>`;
+    li.querySelector("span").onclick = () => openBranch(branch);
+    branchList.appendChild(li);
+  }
+}
+
+function openBranch(branch) {
+  currentBranch = branch;
+  document.getElementById("branchTitle").textContent = "Branch: " + branch;
+  document.getElementById("branches").style.display = "none";
+  document.getElementById("files").style.display = "block";
+  loadFiles();
+}
+
+function deleteBranch(branch) {
+  if (confirm("Xóa branch '" + branch + "'?")) {
+    delete repos[currentRepo][branch];
+    saveData();
+    loadBranches();
+  }
+}
+
+function backToBranches() {
+  document.getElementById("files").style.display = "none";
+  document.getElementById("branches").style.display = "block";
+}
+
+// ================= File =================
+function saveFile() {
+  const fileName = document.getElementById("fileName").value.trim();
+  const fileCode = document.getElementById("fileCode").value;
+  if (!fileName) return alert("Nhập tên file!");
+  repos[currentRepo][currentBranch][fileName] = fileCode;
+  saveData();
+  loadFiles();
+  document.getElementById("fileName").value = "";
+  document.getElementById("fileCode").value = "";
+}
+
+function loadFiles() {
+  const fileList = document.getElementById("fileList");
+  fileList.innerHTML = "";
+  for (let file in repos[currentRepo][currentBranch]) {
+    const li = document.createElement("li");
+
+    const span = document.createElement("span");
+    span.textContent = file;
+    span.onclick = () => viewFile(file);
+
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "❌";
+    delBtn.style.background = "#da3633";
+    delBtn.onclick = (e) => {
+      e.stopPropagation();
+      if (confirm("Xóa file '" + file + "'?")) {
+        delete repos[currentRepo][currentBranch][file];
+        saveData();
+        loadFiles();
+      }
+    };
+
+    li.appendChild(span);
+    li.appendChild(delBtn);
+    fileList.appendChild(li);
+  }
+}
+
+function viewFile(file) {
+  document.getElementById("fileTitle").textContent = "File: " + file;
+  document.getElementById("codeView").textContent = repos[currentRepo][currentBranch][file];
+  document.getElementById("files").style.display = "none";
+  document.getElementById("viewer").style.display = "block";
+}
+
+function backToFiles() {
+  document.getElementById("viewer").style.display = "none";
+  document.getElementById("files").style.display = "block";
+}
+
+// ================= Start =================
+loadRepos();
+</script>
+
+  <script src="script.js"></script>
+</body>
+</html>
