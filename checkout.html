@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanh toán</title>
+  <style>
+    body { margin:0; font-family:Arial, sans-serif; background:#f4f4f4; }
+    header { padding:15px; background:#2c3e50; color:white; text-align:center; }
+    .container {
+      max-width:600px; margin:30px auto; background:white;
+      padding:20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.2);
+    }
+    label { display:block; margin:10px 0 5px; font-weight:bold; }
+    input, select, textarea {
+      width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;
+      margin-bottom:15px;
+    }
+    .btn {
+      display:block; width:100%; padding:12px; text-align:center;
+      background:#1abc9c; color:white; border:none; border-radius:5px;
+      font-size:16px; cursor:pointer;
+    }
+    .btn:hover { background:#16a085; }
+    .summary { background:#ecf0f1; padding:15px; border-radius:5px; margin-bottom:20px; }
+  </style>
+</head>
+<body>
+  <form onsubmit="return submitOrder()">
+  <label>Họ và tên</label>
+  <input type="text" id="name" required>
+
+  <label>Số điện thoại</label>
+  <input type="tel" id="phone" required>
+
+  <label>Địa chỉ</label>
+  <textarea id="address" rows="3" required></textarea>
+
+  <label>Phương thức thanh toán</label>
+  <select id="payment" onchange="toggleQR()" required>
+    <option value="">-- Chọn --</option>
+    <option value="cod">COD</option>
+    <option value="bank">Chuyển khoản</option>
+  </select>
+
+  <!-- QR Code ẩn mặc định -->
+  <div id="qrSection" style="display:none; text-align:center; margin:15px 0;">
+    <p>Quét mã QR để chuyển khoản:</p>
+    <img src="https://img.vietqr.io/image/970422-1234567890-compact.png" 
+         alt="QR Thanh toán" 
+         style="max-width:250px; border:1px solid #ccc; border-radius:8px;">
+    <p><b>Ngân hàng:</b> MB Bank</p>
+    <p><b>Số tài khoản:</b> 0986931896</p>
+    <p><b>Tên:</b> NGUYEN HAi ANH</p>
+  </div>
+
+  <button type="submit" class="btn">Xác nhận đặt hàng</button>
+</form>
+
+<script>
+  function toggleQR(){
+    let payment = document.getElementById("payment").value;
+    let qrSection = document.getElementById("qrSection");
+    if(payment === "bank"){
+      qrSection.style.display = "block";
+    } else {
+      qrSection.style.display = "none";
+    }
+  }
+
+  function submitOrder(){
+    alert("Đơn hàng của bạn đã được đặt thành công!");
+    return false;
+  }
+</script>
+
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById("productName").textContent =
+      "Sản phẩm: " + (params.get("name") || "");
+    document.getElementById("productPrice").textContent =
+      "Giá: " + (params.get("price") || "");
+
+    function submitOrder(){
+      alert("Đơn hàng của bạn đã được đặt thành công!");
+      return false;
+    }
+  </script>
+</body>
+</html>

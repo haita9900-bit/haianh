@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Shop đồ công nghệ 5.0 — Web bán hàng đa thiết bị</title>
+  <meta name="description" content="Demo website bán hàng responsive (desktop, tablet, mobile)."/>
+  <style>
+    
+    /* ====== Reset & Base ====== */
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#0f62fe;
+      --danger:#ef4444;
+      --radius:12px;
+      --max-width:1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", tablat, "Helvetica Neue", Arial;
+      background:var(--bg);
+      color:#111827;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.4;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width:100%; display:block; }
+
+    /* ====== Layout ====== */
+    .container{max-width:var(--max-width); margin:0 auto; padding:16px;}
+    header{background:linear-gradient(180deg, #fff, #fbfbff); position:sticky; top:0; z-index:50; box-shadow:0 1px 0 rgba(16,24,40,0.04);}
+    .topbar{display:flex;align-items:center;gap:12px;padding:12px 16px;}
+    .logo{font-weight:700;color:var(--accent);font-size:18px}
+    .search{flex:1;display:flex;align-items:center;background:#fff;border-radius:999px;padding:6px 10px;border:1px solid rgba(16,24,40,0.06)}
+    .search input{border:0;outline:none;flex:1;padding:8px;font-size:14px}
+    .icons{display:flex;gap:10px;align-items:center}
+    .icon-btn{background:transparent;border:0;padding:8px;border-radius:8px;cursor:pointer}
+    .icon-btn:focus{outline:2px solid rgba(15,98,254,0.18)}
+
+    /* ====== Responsive grid ====== */
+    .hero{display:flex;align-items:center;gap:20px;padding:20px 0}
+    .hero-left{flex:1}
+    .hero-right{flex:1;display:flex;justify-content:center}
+    .products-grid{display:grid;gap:16px;grid-template-columns:repeat(2,1fr)}
+    @media(min-width:720px){ .products-grid{grid-template-columns:repeat(3,1fr)} }
+    @media(min-width:1024px){ .products-grid{grid-template-columns:repeat(4,1fr)} }
+
+    /* ====== Product card ====== */
+    .card{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 4px 18px rgba(16,24,40,0.06);display:flex;flex-direction:column}
+    .card .thumb{border-radius:10px;overflow:hidden;display:block;position:relative;padding-top:75%}
+    .card .thumb img{position:absolute;inset:0;object-fit:cover;width:100%;height:100%}
+    .card h3{font-size:15px;margin:10px 0 4px}
+    .price-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .price{font-weight:700;color:#111827}
+    .muted{color:var(--muted);font-size:13px}
+    .btn{background:var(--accent);color:white;border:0;padding:8px 12px;border-radius:8px;cursor:pointer}
+    .btn.secondary{background:#eef2ff;color:var(--accent);font-weight:600}
+    .badge{background:#fffbeb;color:#92400e;padding:6px 8px;border-radius:8px;font-size:12px}
+
+    /* ====== Cart drawer ====== */
+    .cart-drawer{position:fixed;right:0;top:0;height:100vh;width:360px;max-width:95vw;background:var(--card);box-shadow:-12px 0 30px rgba(2,6,23,0.2);transform:translateX(110%);transition:transform .28s ease-in-out;z-index:60;padding:16px;display:flex;flex-direction:column}
+    .cart-drawer.open{transform:translateX(0)}
+    .cart-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:8px}
+    .cart-items{overflow:auto;flex:1;padding:8px 0}
+    .cart-item{display:flex;gap:10px;padding:8px;border-radius:10px;align-items:center}
+    .cart-item img{width:64px;height:64px;border-radius:8px;object-fit:cover}
+    .qty-control{display:flex;align-items:center;gap:6px;margin-top:6px}
+    .small{font-size:13px;color:var(--muted)}
+
+    /* ====== Modal (Product detail) ====== */
+    .overlay{position:fixed;inset:0;background:rgba(2,6,23,0.5);display:none;align-items:center;justify-content:center;z-index:70}
+    .overlay.open{display:flex}
+    .modal{width:min(900px,95vw);background:var(--card);border-radius:12px;padding:16px;display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:720px){ .modal{grid-template-columns:1fr 1fr} }
+    .modal .gallery{border-radius:8px;overflow:hidden}
+    .modal .gallery img{width:100%;height:100%;object-fit:cover}
+    .modal h2{margin:0}
+    .modal .actions{display:flex;gap:8px;margin-top:12px}
+
+    /* ====== Footer ====== */
+    footer{padding:24px 0;color:var(--muted);font-size:14px;text-align:center}
+
+    /* ====== Tiny utilities ====== */
+    .row{display:flex;gap:12px;align-items:center}
+    .center{display:flex;justify-content:center;align-items:center}
+    .chip{background:#f3f4f6;padding:6px 8px;border-radius:999px;font-size:12px}
+    .link{color:var(--accent);cursor:pointer}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  </style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Bán Hàng</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: #2c3e50;
+      color: white;
+    }
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .menu-btn {
+      font-size: 26px;
+      cursor: pointer;
+    }
+    /* menu ẩn (slide từ bên trái) */
+    .menu {
+      position: fixed;
+      top: 0;
+      left: -250px; /* ẩn bên trái */
+      width: 250px;
+      height: 100%;
+      background: #34495e;
+      padding-top: 60px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+      transition: left 0.3s ease;
+    }
+    .menu.open {
+      left: 0; /* trượt ra */
+    }
+    .menu a {
+      display: block;
+      padding: 15px;
+      color: white;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    .menu a:hover {
+      background: #1abc9c;
+    }
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      cursor: pointer;
+      color: white;
+    }
+    /* nền tối khi menu mở */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+    }
+    .overlay.show {
+      display: block;
+    }
+  </style>
+</head>
+</body>
+  <header>
+    <div class="logo">Shop đồ công nghệ 5.0</div>
+    <div class="menu-btn" onclick="openMenu()">☰</div>
+  </header>
+  <div class="menu" id="menu">
+    <div class="close-btn" onclick="closeMenu()">×</div>
+    <a href="#">Trang chủ</a>
+    <a href="#">Sản phẩm</a>
+    <a href="#">Khuyến mãi</a>
+    <a href="#">Giỏ hàng</a>
+    <a href="#">Liên hệ</a>
+    <a href="#">Đăng nhập</a>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+  <script>
+    function openMenu() {
+      document.getElementById("menu").classList.add("open");
+      document.getElementById("overlay").classList.add("show");
+    }
+    function closeMenu() {
+      document.getElementById("menu").classList.remove("open");
+      document.getElementById("overlay").classList.remove("show");
+    }
+  </script>
+
+  <header role="banner" aria-label="Top">
+    <div class="container topbar">
+      <button class="icon-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+      <div class="logo" aria-hidden="true">Shop đồ công nghệ 5.0</div>
+
+      <div class="search" role="search" aria-label="Tìm kiếm sản phẩm">
+        <svg width="18" height="18" viewBox="0 0 24 24" style="opacity:.6;margin-right:8px"><path d="M21 21l-4.35-4.35" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="11" cy="11" r="6" stroke="#666" stroke-width="2" fill="none"/></svg>
+        <input id="searchInput" placeholder="Tìm sản phẩm, ví dụ: áo, giày..." aria-label="Search input" />
+      </div>
+
+      <div class="icons">
+        <button class="icon-btn" title="Yêu thích" aria-label="Wishlist">♡</button>
+        <button class="icon-btn" id="cartBtn" aria-haspopup="dialog" aria-expanded="false" title="Giỏ hàng">🛒 <span id="cartCount" class="chip" style="display:none">0</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" id="main">
+    <!-- Hero -->
+    <section class="hero" aria-label="Hero section">
+      <div class="hero-left">
+        <h1 style="margin:0 0 8px">Cửa hàng 5.0 chuyên các đồ về công nghệ thông minh</h1>
+        <p class="muted" style="margin:0 0 12px">Responsive, accessible, và dễ mở rộng. Thử nhấn "Thêm" trên sản phẩm.</p>
+        <div class="row">
+          <span class="badge">Giảm 10% cho đơn đầu</span>
+          <a class="link" href="#products">Xem sản phẩm</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <img src="./assets/img/lenovo-legion-7-gen7-1.jpg" alt="Hero" style="width:100%;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.08)" />
+      </div>
+    </section>
+
+    <!-- Products -->
+    <section id="products" aria-label="Danh sách sản phẩm" style="margin-top:18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h2 style="margin:0">Sản phẩm nổi bật</h2>
+        <div class="small muted">Hiển thị <span id="displayCount">0</span> sản phẩm</div>
+      </div>
+ <div class="container">
+    <div class="products">
+      <div class="product-card">
+        <img src="./assets/img/text_ng_n_-_2024-04-21t212713.543.png" alt="Laptop Lenovo Legion 7 16IRX9 83FD004MVN">
+        <div class="product-info">
+          <h3>Laptop Lenovo Legion 7 16IRX9 83FD004MVN</h3>
+          <div class="price">60.990.000₫</div>
+          <form action="index.html" target="_blank" method="get">
+            <button type="submit" class="buy-btn">Mua Ngay</button>
+          </form>
+        </div>
+      </div>
+      <div class="product-card">
+        <img src="./assets/img/2022_asus_tuf_gaming_f15_fx507_jaeger_gray_c8fc1c350e.webp" alt="Laptop Asus TUF Gaming FX507ZC4-HN095W">
+        <div class="product-info">
+          <h3>Laptop Asus TUF Gaming FX507ZC4-HN095W</h3>
+          <div class="price">18.490.000đ</div>
+          <form action="index.html" target="_blank" method="get">
+            <button type="submit" class="buy-btn">Mua Ngay</button>
+          </form>
+        </div>
+      </div>
+      <div class="product-card">
+        <img src="./assets/img/text_ng_n_47__3_2_1.png" alt="Laptop Lenovo LOQ 15IAX9 83GS000FVN">
+        <div class="product-info">
+          <h3>Laptop Lenovo LOQ 15IAX9 83GS000FVN</h3>
+          <div class="price">17.990.000đ</div>
+          <form action="index.html" target="_blank" method="get">
+            <button type="submit" class="buy-btn">Mua Ngay</button>
+          </form>
+        </div>
+      </div>
+         <div class="container">
+    <div class="products">
+      <div class="product-card">
+        <img src="./assets/img/iphone-17-pro-max-xanh-2-638930821911831487-750x500.jpg" alt="iPhone 17 Pro Max">
+        <div class="product-info">
+          <h3>iPhone 17 Pro Max</h3>
+          <div class="price">37.990.000₫</div>
+          <form action="index.html" target="_blank" method="get">
+            <button type="submit" class="buy-btn">Mua Ngay</button>
+          </form>
+        </div>
+      </div>
+       <div class="container">
+    <div class="products">
+      <div class="product-card">
+        <img src="./assets/img/ipad-pro-13-select-wifi-silver-202210-01.webp" alt="iPad Pro 13">
+        <div class="product-info">
+          <h3>iPad Pro 13</h3>
+          <div class="price">19.990.000₫</div>
+          <form action="index.html" target="_blank" method="get">
+            <button type="submit" class="buy-btn">Mua Ngay</button>
+          </form>
+        </div>
+      </div>
+</body>
+</html>
