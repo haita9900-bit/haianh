@@ -133,61 +133,6 @@
     <input type="password" placeholder="Xác nhận mật khẩu" required>
     <button>ĐĂNG KÝ</button>
     <p>Đã có tài khoản? <a onclick="toggleForm()">Đăng nhập</a></p>
-  </div>
-
-  <script>
-    function toggleForm() {
-      const loginForm = document.getElementById("login-form");
-      const registerForm = document.getElementById("register-form");
-
-      if (loginForm.style.display === "none") {
-        loginForm.style.display = "block";
-        registerForm.style.display = "none";
-      } else {
-        loginForm.style.display = "none";
-        registerForm.style.display = "block";
-      }
-    }
-  </script>
-   <div class="wrap" role="main">
-    <!-- Facebook icon (click opens Facebook profile) -->
-    <a class="fb-icon" href="https://www.facebook.com/hai.ahhhh" target="_blank" rel="noopener noreferrer" title="Mở Facebook">
-      <!-- simple 'f' svg -->
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12.07C22 6.49 17.52 2 11.94 2S2 6.49 2 12.07c0 4.99 3.66 9.13 8.44 9.95v-7.04H8.1v-2.91h2.34V9.41c0-2.31 1.37-3.58 3.47-3.58.99 0 2.03.18 2.03.18v2.21h-1.13c-1.12 0-1.47.7-1.47 1.42v1.7h2.5l-.4 2.91h-2.1v7.04C18.34 21.2 22 17.07 22 12.07z"/></svg>
-    </a>
-
-    <div class="center-area" aria-live="polite">
-      <!-- Laptop image card -->
-      <div class="laptop-card" role="img" aria-label="Hình laptop hiển thị trang Facebook">
-        <!-- Thay src bằng đường dẫn ảnh của bạn hoặc url -->
-        <img src="./wallpapersden.com_satoru-gojo-jujutsu-kaisen-fortnite_1920x1080.jpg"
-             alt="Laptop mở trang Facebook (ví dụ)">
-      </div>
-
-      <!-- Nút liên hệ: mở Facebook profile (mở tab mới) -->
-      <a class="contact-btn" id="contactBtn" href="https://www.facebook.com/hai.ahhhh" target="_blank" rel="noopener noreferrer">
-        liên hệ in4
-      </a>
-    </div>
-
-    <!-- Nút chuyển trang nội bộ -> other.html -->
-    <a class="goto" id="gotoBtn" href="tap3.html" title="Chuyển trang">
-      trang share code →
-    </a>
-  </div>
-
-  <script>
-    // Thêm hành vi nếu bạn muốn: ví dụ logging / animation
-    document.getElementById('contactBtn').addEventListener('click', function(e){
-      // target mặc định mở tab mới vì attribute target="_blank"
-      console.log('Người dùng nhấn "liên hệ in4" — mở liên kết Facebook.');
-    });
-
-    document.getElementById('gotoBtn').addEventListener('click', function(e){
-      // mặc định link <a href="other.html"> sẽ chuyển trang
-      console.log('Chuyển trang nội bộ sang other.html');
-    });
-  </script>
 
 </body>
 </html>
